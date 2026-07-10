@@ -157,7 +157,6 @@ This class is used to define the game list, track of the head and tail, as well 
 
         if(tool.isDuplicate(this, game.name)){
 
-            IO.println("Could not add game because name is taken\n");
             return null;
 
         }
@@ -232,9 +231,6 @@ This class is used to define the game list, track of the head and tail, as well 
 
         }
 
-        if(tool.Confirmation() == false){
-            return false;
-        }
 
 
         if(game == this.head){
@@ -307,9 +303,8 @@ This class is used to define the game list, track of the head and tail, as well 
     //Reads file line by line and passes parsed line variables to addgame()
     //Returns true if file is read correctly and false if not
 
-    boolean readAll() {
+    boolean readAll(String file) {
 
-        String file = IO.readln("Please enter the file: ");
 
         try {
 
@@ -478,7 +473,7 @@ Input Handler Class handles all major menu changes for UI and passes user input 
 
             } else if(choice.equalsIgnoreCase("3") || choice.equalsIgnoreCase("read")){
 
-                queue.readAll();
+                readMenu(queue);
 
             }else if (choice.equalsIgnoreCase("4") || choice.equalsIgnoreCase("save")){
 
@@ -501,6 +496,11 @@ Input Handler Class handles all major menu changes for UI and passes user input 
         }
 
         return queue;
+    }
+
+    boolean readMenu(GameList queue){
+        String file = IO.readln("Please enter the file: ");
+        return queue.readAll(file);
     }
 
     //editMenu
@@ -610,8 +610,11 @@ Input Handler Class handles all major menu changes for UI and passes user input 
             }
 
             if(input.equalsIgnoreCase("1")){
-
+                if(tool.Confirmation() == false){
+                    continue;
+                }
                 queue.removeGame(game);
+                return null;
 
             } else if (input.equalsIgnoreCase("2")){
 
@@ -761,7 +764,7 @@ This is the Tools class. The purpose is to create a selection of general use too
 
             if (cursor.name.equalsIgnoreCase(name)) {
 
-                IO.println("Could not add " + cursor.name + "because name already exists");
+                IO.println("\nCould not add " + cursor.name + " because name already exists\n");
 
                 return true;
 
@@ -881,6 +884,8 @@ This is the Main class. The purpose of the Main is to create a game list and inp
     //no arguments
     //no return
     public void main() {
+
+        IO.println("Search for game to edit, remove, or apply discount\n");
 
         GameList queue = new GameList();
 
